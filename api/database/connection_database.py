@@ -1,12 +1,11 @@
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from sqlalchemy import create_engine
 from typing import Optional
+
 from api.config import DATABASE_URL
 
 
 Base = declarative_base()
-
-
 
 class Database():
     _instance: Optional['Database'] = None
@@ -15,8 +14,8 @@ class Database():
             cls._instance = super(Database, cls).__new__(cls)
             cls.engine = create_engine(db_path, echo=True)
             cls._instance.Session = scoped_session(sessionmaker(bind=cls._instance.engine))
-
-            from api.models.model import Car, Photo 
+            
+            from api.models.model import Cars, Photos
             Base.metadata.create_all(bind=cls.engine)
         return cls._instance
     

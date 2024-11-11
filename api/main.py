@@ -1,10 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from api.routes import car_routes
-from .config import DATABASE_URL
-from .database.connection_database import Database 
-
-Database(DATABASE_URL)
 
 app = FastAPI()
 

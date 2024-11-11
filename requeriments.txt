@@ -3,4 +3,5 @@ pydantic
 sqlalchemy
 asyncpg
 uvicorn[standard]
-selenium
+python-multipart
+psycopg2-binary
