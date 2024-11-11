@@ -6,7 +6,7 @@ route = APIRouter()
 
 @route.post("/new_car",
             responses={
-                200: {"description": "Usuário criado com sucesso!"},
+                200: {"description": "Carro adicionado com sucesso!"},
         })
 async def add_new_car(file: UploadFile, car: CarSchema = Depends()):
     try:
@@ -15,6 +15,15 @@ async def add_new_car(file: UploadFile, car: CarSchema = Depends()):
         encode = b64encode(file_content).decode('utf-8')
         photo_id = Photo.add_new_photo(encode)
         Car.add_new_car(name=car.Name, status=car.Status, photo_id=photo_id)
+    except Exception as e:
+        return f'error: {e}'
+    else:
+        return "success"
+
+@route.delete("/remove/{car_id}")
+def remove_car(car_id: int) -> str:
+    try:
+        Car.remove_car(car_id=car_id)
     except Exception as e:
         return f'error: {e}'
     else:

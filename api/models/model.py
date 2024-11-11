@@ -14,4 +14,4 @@ class Cars(Base):
     status = Column(String)
 
     photo_id = Column(Integer, ForeignKey("photo.id")) 
-    photo = relationship("Photos", backref="car")
+    photo = relationship("Photos", backref="car", cascade="all, delete")

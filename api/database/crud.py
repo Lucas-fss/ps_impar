@@ -13,9 +13,17 @@ class Photo:
         return new_photo.id        
 
 class Car:
+    _session = db.get_session()
+
     @classmethod
     def add_new_car(cls, name: str, status: str, photo_id: int) -> None:
-        session = db.get_session()
         new_car = Cars(name=name, status=status, photo_id=photo_id)
-        session.add(new_car)
-        session.commit()
+        cls._session.session.add(new_car)
+        cls._session.session.commit()
+
+    @classmethod
+    def remove_car(cls, car_id: int) -> None:
+        car = cls._session.query(Cars).get(car_id)
+        if car:
+            cls._session.delete(car)
+            cls._session.commit()
