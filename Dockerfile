@@ -1,5 +1,10 @@
 FROM python:3.12-alpine
 WORKDIR /app/
+#instala recursos para comunicação com o postgres
+RUN apk update && apk add --no-cache \
+    libpq-dev \
+    build-base
+
 
 COPY ./requeriments.txt ./requeriments.txt
 

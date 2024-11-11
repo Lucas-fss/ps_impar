@@ -1,5 +1,9 @@
 services:
   api_impar:
+    #aguarda o db estar pronto
+    depends_on:
+      db:
+        condition: service_healthy
     container_name: api_impar
     build:
       context: .
@@ -13,3 +17,30 @@ services:
         - path: ./
           action: rebuild 
           target: ./app/
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_USER: ${PGUSER}
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    env_file:
+      - .env
+    #checa se o db está pronto para conexões
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $PGUSER -d $DATABASE -h localhost -p 5432"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+ 
+volumes:
+  pgdata:
