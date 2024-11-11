@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, Depends, HTTPException
 from base64 import b64encode
 from api.schemas import CarSchema
 from api.database.crud import Photo, Car
@@ -23,21 +23,23 @@ async def add_new_car(file: UploadFile, car: CarSchema = Depends()):
 @route.delete("/remove/{car_id}", 
                 responses={
                     200: {"description": "Carro adicionado com sucesso!"},
+                    404: {"description": "Carro não encontrado!"}
             })
 def remove_car(car_id: int) -> str:
     try:
         Car.remove_car(car_id=car_id)
-    except Exception as e:
-        return f'error: {e}'
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
     else:
         return "success"
     
 
-@route.put("/change", 
+@route.put("/change/{car_id}", 
             responses={
-                200: {"description": "Carro adicionado com sucesso!"},
+                200: {"description": "Carro atualizado com sucesso!"},
+                404: {"description": "Carro não encontrado!"}
         })
-def change_car_info(car: CarSchema):
+def change_car_info(car_id: int, car: CarSchema):
     try:
         pass
     except Exception as e:

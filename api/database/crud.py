@@ -1,8 +1,11 @@
 from .connection_database import Database
 from api.models.model import Cars, Photos
-
+from fastapi import HTTPException
 from api.config import DATABASE_URL
 db = Database(DATABASE_URL)
+
+
+
 class Photo:
     @classmethod
     def add_new_photo(cls, base_64: str) -> int:
@@ -24,6 +27,16 @@ class Car:
     @classmethod
     def remove_car(cls, car_id: int) -> None:
         car = cls._session.query(Cars).get(car_id)
-        if car:
-            cls._session.delete(car)
-            cls._session.commit()
+        if not car:
+            raise HTTPException(status_code=404, detail="Carro não encontrado!")
+        cls._session.delete(car)
+        cls._session.commit()
+    
+    @classmethod
+    def change_car(cls, id: int = None, name: str = None, status: str = None, photo_id: int = None) -> None:
+        car = cls._session.query(Cars).get(id)
+        if not car:
+            raise HTTPException(status_code=404, detail="Carro não encontrado!")
+        if name: car.name = name
+        if status: car.status = status
+        if photo_id: car.photo_id = photo_id
