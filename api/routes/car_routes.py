@@ -20,8 +20,6 @@ async def add_new_car(file: UploadFile, car: CarSchema = Depends()) -> str:
     else:
         return "success"
 
-
-
 @route.delete("/remove/{car_id}", 
                 responses={
                     200: {"description": "Carro removido com sucesso!"},

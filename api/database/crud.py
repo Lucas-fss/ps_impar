@@ -1,7 +1,6 @@
 from .connection_database import Database
 from api.models.model import Cars, Photos
 from fastapi import HTTPException
-from base64 import b64encode
 from api.config import DATABASE_URL
 db = Database(DATABASE_URL)
 
